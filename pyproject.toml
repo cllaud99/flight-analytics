@@ -1,0 +1,27 @@
+[project]
+name = "flight-analytics"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+dependencies = [
+    "black>=25.1.0",
+    "bs4>=0.0.2",
+    "isort>=6.0.0",
+    "loguru>=0.7.3",
+    "pytest>=8.3.4",
+    "requests>=2.32.3",
+    "taskipy>=1.14.1",
+    "tqdm>=4.67.1",
+]
+
+[tool.taskipy.tasks]
+format = """
+isort .
+black .
+"""
+kill = "kill -9 $(lsof -t -i :8000)"
+test = "pytest -v"
+run = """
+streamlit run src/frontend/app.py
+"""
