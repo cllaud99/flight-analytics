@@ -13,14 +13,14 @@ sys.path.insert(
 from src.config_logger import logger_decorator
 
 # Diretório para salvar os arquivos
-DOWNLOAD_DIR = "data"
-MIN_YEAR = 2014  # Padrão, podendo ser alterado conforme necessário
+DOWNLOAD_DIR = "data/bronze"
+MIN_YEAR = 2023  # Padrão, podendo ser alterado conforme necessário
 os.makedirs(DOWNLOAD_DIR, exist_ok=True)
 
 
 @logger_decorator
 def scraper_links(
-    url: str, ignorar_parent: bool = True, min_year: int = 2014
+    url: str, ignorar_parent: bool = True, min_year: int = 2020
 ) -> tuple[list, list]:
     """
     Extrai os links de uma página web e retorna:
@@ -106,7 +106,7 @@ def download_file(url: str, folder: str):
 
 
 @logger_decorator
-def main():
+def main_download():
     """
     Função principal para buscar arquivos CSV de uma URL e baixá-los, considerando o ano mínimo.
     """
@@ -143,4 +143,4 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    main_download()
