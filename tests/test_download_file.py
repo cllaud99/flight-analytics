@@ -1,8 +1,12 @@
 import os
+from unittest.mock import MagicMock, mock_open, patch
+
 import pytest
 import requests
-from unittest.mock import patch, MagicMock, mock_open
-from src.scraper_links import download_file  # Substitua pelo caminho correto do seu módulo
+
+from src.scraper_links import (
+    download_file,
+)  # Substitua pelo caminho correto do seu módulo
 
 
 @pytest.fixture
@@ -31,8 +35,12 @@ def test_download_success(mock_tqdm, mock_open_file, mock_get, fake_url, fake_fo
     download_file(fake_url, fake_folder)
 
     filename = os.path.join(fake_folder, "file.txt")
-    mock_open_file.assert_called_once_with(filename, "wb")  # Verifica se o arquivo foi aberto para escrita
-    mock_open_file().write.assert_called_with(fake_content)  # Verifica se o conteúdo foi gravado
+    mock_open_file.assert_called_once_with(
+        filename, "wb"
+    )  # Verifica se o arquivo foi aberto para escrita
+    mock_open_file().write.assert_called_with(
+        fake_content
+    )  # Verifica se o conteúdo foi gravado
 
 
 @patch("requests.get", side_effect=requests.ConnectionError)
@@ -66,7 +74,9 @@ def test_download_timeout(mock_get, fake_url, fake_folder, capsys):
 
 @patch("requests.get")
 @patch("builtins.open", new_callable=mock_open)
-def test_download_creates_correct_filename(mock_open_file, mock_get, fake_url, fake_folder):
+def test_download_creates_correct_filename(
+    mock_open_file, mock_get, fake_url, fake_folder
+):
     """Testa se o caminho correto do arquivo é gerado e o arquivo é salvo corretamente."""
     mock_response = MagicMock()
     mock_response.iter_content = lambda chunk_size: [b"data"]
@@ -77,4 +87,4 @@ def test_download_creates_correct_filename(mock_open_file, mock_get, fake_url, f
     download_file(fake_url, fake_folder)
 
     expected_path = os.path.join(fake_folder, "file.txt")
-    mock_open_file.assert_called_once_with(expected_path, "wb") 
+    mock_open_file.assert_called_once_with(expected_path, "wb")
