@@ -16,9 +16,6 @@ sys.path.insert(
 
 from src.models import validate
 
-
-
-
 CSV_VALIDO = "tests/models_tests/voos_validos.csv"
 CSV_INVALIDO = "tests/models_tests/voos_invalidos.csv"
 
@@ -28,7 +25,6 @@ def test_csv_valido():
     assert not df.empty  # Deve conter dados válidos
     assert df.shape[0] == 13
     assert df.iloc[0]["sigla_icao_empresa"] == "AAL"
-
 
 
 def test_csv_invalido():

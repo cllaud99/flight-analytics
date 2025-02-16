@@ -1,8 +1,10 @@
-from pydantic import BaseModel, Field, field_validator, ValidationError
+import math
 from datetime import datetime
 from typing import Optional
+
 import pandas as pd
-import math
+from pydantic import BaseModel, Field, ValidationError, field_validator
+
 
 class VooModel(BaseModel):
     sigla_icao_empresa: str = Field(..., title="Sigla ICAO da Empresa Aérea")
@@ -26,8 +28,13 @@ class VooModel(BaseModel):
     situacao_partida: str = Field(..., title="Situação da Partida")
     situacao_chegada: str = Field(..., title="Situação da Chegada")
 
-
-    @field_validator('partida_prevista', 'partida_real', 'chegada_prevista', 'chegada_real', mode="before")
+    @field_validator(
+        "partida_prevista",
+        "partida_real",
+        "chegada_prevista",
+        "chegada_real",
+        mode="before",
+    )
     def parse_datetime(cls, value):
         """
         Converte strings de data no formato 'DD/MM/YYYY HH:MM' para datetime.
@@ -37,7 +44,7 @@ class VooModel(BaseModel):
             return value
         return datetime.strptime(value, "%d/%m/%Y %H:%M")
 
-    @field_validator('justificativa', mode="before")
+    @field_validator("justificativa", mode="before")
     def justif_validator(cls, value):
         """
         Se o valor for NaN (não um número), converte para None.
@@ -46,17 +53,32 @@ class VooModel(BaseModel):
         if isinstance(value, float) and math.isnan(value):
             return None
         return value
-    
+
 
 def validate(file_path: str) -> pd.DataFrame:
     """Lê um CSV, valida os dados e retorna um DataFrame apenas com os registros válidos."""
     df = pd.read_csv(file_path, dtype=str, sep=";")
     df.columns = [
-    "sigla_icao_empresa", "empresa_aerea", "numero_voo", "codigo_di", 
-    "codigo_tipo_linha", "modelo_equipamento", "numero_assentos",
-    "sigla_icao_origem", "descricao_origem", "partida_prevista", "partida_real",
-    "sigla_icao_destino", "descricao_destino", "chegada_prevista", "chegada_real",
-    "situacao_voo", "justificativa", "referencia", "situacao_partida", "situacao_chegada"
+        "sigla_icao_empresa",
+        "empresa_aerea",
+        "numero_voo",
+        "codigo_di",
+        "codigo_tipo_linha",
+        "modelo_equipamento",
+        "numero_assentos",
+        "sigla_icao_origem",
+        "descricao_origem",
+        "partida_prevista",
+        "partida_real",
+        "sigla_icao_destino",
+        "descricao_destino",
+        "chegada_prevista",
+        "chegada_real",
+        "situacao_voo",
+        "justificativa",
+        "referencia",
+        "situacao_partida",
+        "situacao_chegada",
     ]
     print(df.columns)
     voos_validos = []
