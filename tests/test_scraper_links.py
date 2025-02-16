@@ -1,5 +1,7 @@
-import pytest
 from unittest.mock import patch
+
+import pytest
+
 from src.scraper_links import scraper_links  # Importando a função do módulo correto
 
 
@@ -17,6 +19,7 @@ def html_mock():
     </html>
     """
 
+
 @patch("requests.get")
 def test_scraper_links(mock_get, html_mock):
     """Testa se a função extrai corretamente os links da página."""
@@ -32,6 +35,7 @@ def test_scraper_links(mock_get, html_mock):
     assert len(page_links) == 2  # O diretório de 2013 deve ser ignorado
     assert "https://example.com/page1/" in page_links
     assert "https://example.com/page2/" in page_links  # Link relativo convertido
+
 
 @patch("requests.get")
 def test_scraper_links_no_links(mock_get):
