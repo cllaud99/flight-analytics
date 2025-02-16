@@ -38,7 +38,7 @@ class VooModel(BaseModel):
         return datetime.strptime(value, "%d/%m/%Y %H:%M")
 
     @field_validator('justificativa', mode="before")
-    def validar_justificativa(cls, value):
+    def justif_validator(cls, value):
         """
         Se o valor for NaN (não um número), converte para None.
         Caso contrário, retorna o valor inalterado.
@@ -48,7 +48,7 @@ class VooModel(BaseModel):
         return value
     
 
-def validar_voos(file_path: str) -> pd.DataFrame:
+def validate(file_path: str) -> pd.DataFrame:
     """Lê um CSV, valida os dados e retorna um DataFrame apenas com os registros válidos."""
     df = pd.read_csv(file_path, dtype=str, sep=";")
     df.columns = [
